@@ -29,7 +29,8 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new SteamStrategy({
     returnURL: 'http://localhost:3000/auth/steam/return',
     realm: 'http://localhost:3000/',
-    apiKey: 'Your API key here'
+    apiKey: 'YOUR API SECRET',
+    identifierField: 'openid.identity'
   },
   function(identifier, profile, done) {
     // asynchronous verification, for effect...
@@ -95,6 +96,8 @@ app.get('/auth/steam',
 app.get('/auth/steam/return',
   passport.authenticate('steam', { failureRedirect: '/' }),
   function(req, res) {
+    console.log(req.url, req.originalUrl)
+    console.log('res', res)
     res.redirect('/');
   });
 

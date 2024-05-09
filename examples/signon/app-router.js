@@ -4,10 +4,23 @@
  */
 var express = require('express')
   , passport = require('passport')
-  , util = require('util')
-  , session = require('express-session')
+//  , util = require('util')
+//  , session = require('express-session')
   , SteamStrategy = require('../../').Strategy
   , authRoutes = require('./routes/auth');
+
+const { logger } = require('./logger.js');
+
+const morgan = require('morgan');
+const morganMiddleware = morgan(
+  ':method :url :status :res[content-length] - :response-time ms',
+  {
+    stream: {
+      // Configure Morgan to use our custom logger with the http severity
+      write: (message) => logger.info(message.trim()),
+    },
+  }
+);
 
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
@@ -16,70 +29,81 @@ var express = require('express')
 //   the user by ID when deserializing.  However, since this example does not
 //   have a database of user records, the complete Steam profile is serialized
 //   and deserialized.
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
+// passport.serializeUser(function(user, done) {
+//   done(null, user);
+// });
+// 
+// passport.deserializeUser(function(obj, done) {
+//   done(null, obj);
+// });
 
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
-});
+const strat = new SteamStrategy({
+      returnURL: 'http://localhost:3000/auth/steam/return',
+      realm: 'http://localhost:3000/',
+      apiKey: 'YOUR API SECRET',
+      identifierField: 'openid.identity'
+    },
+    function(identifier, profile, done) {
+      // asynchronous verification, for effect...
+      process.nextTick(function () {
+        logger.info('steam profile info', profile);
+        // To keep the example simple, the user's Steam profile is returned to
+        // represent the logged-in user.  In a typical application, you would want
+        // to associate the Steam account with a user record in your database,
+        // and return that user instead.
+        profile.identifier = identifier;
+        return done(null, profile);
+      });
+    }
+  );
+
+authRoutes.strat = strat;
 
 // Use the SteamStrategy within Passport.
 //   Strategies in passport require a `validate` function, which accept
 //   credentials (in this case, an OpenID identifier and profile), and invoke a
 //   callback with a user object.
-passport.use(new SteamStrategy({
-    returnURL: 'http://localhost:3000/auth/steam/return',
-    realm: 'http://localhost:3000/',
-    apiKey: 'Your API key here'
-  },
-  function(identifier, profile, done) {
-    // asynchronous verification, for effect...
-    process.nextTick(function () {
-
-      // To keep the example simple, the user's Steam profile is returned to
-      // represent the logged-in user.  In a typical application, you would want
-      // to associate the Steam account with a user record in your database,
-      // and return that user instead.
-      profile.identifier = identifier;
-      return done(null, profile);
-    });
-  }
-));
+passport.use(strat);
 
 var app = express();
+
+app.use(morganMiddleware);
 
 // configure Express
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-app.use(session({
-    secret: 'your secret',
-    name: 'name of session id',
-    resave: true,
-    saveUninitialized: true}));
+// app.use(session({
+//     secret: 'your secret',
+//     name: 'name of session id',
+//     resave: true,
+//     saveUninitialized: true}));
 
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 app.use(express.static(__dirname + '/../../public'));
 
-app.get('/', function(req, res){
-  res.render('index', { user: req.user });
-});
-
-app.get('/account', ensureAuthenticated, function(req, res){
-  res.render('account', { user: req.user });
-});
-
-app.get('/logout', function(req, res){
-  req.logout();
-  res.redirect('/');
-});
+// app.get('/', function(req, res){
+//   res.render('index', { user: req.user });
+// });
+// 
+// app.get('/account', ensureAuthenticated, function(req, res){
+//   res.render('account', { user: req.user });
+// });
+// 
+// app.get('/logout', function(req, res){
+//   req.logout();
+//   res.redirect('/');
+// });
 
 // See views/auth.js for authentication routes
 app.use('/auth', authRoutes);
+
+app.get('/health', function(req, res){
+  res.sendStatus(200);
+});
 
 app.listen(3000);
 
