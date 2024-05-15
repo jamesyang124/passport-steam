@@ -1,8 +1,7 @@
 {
   "_args": [
     [
-      "@passport-next/passport-openid@1.0.0",
-      "/Users/James_Yang/Coding/misc/passport-steam"
+      "@passport-next/passport-openid@1.0.0"
     ]
   ],
   "_from": "@passport-next/passport-openid@1.0.0",

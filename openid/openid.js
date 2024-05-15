@@ -45,10 +45,9 @@ function hasOwnProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
+// return url and realm for preset
 openid.RelyingParty = function(returnUrl, realm, stateless, strict, extensions)
 {
-  console.log('openid RelyingParty returnUrl', returnUrl);
-  console.log('openid RelyingParty realm', realm);
   this.returnUrl = returnUrl;
   this.realm = realm || null;
   this.stateless = stateless;
@@ -56,11 +55,10 @@ openid.RelyingParty = function(returnUrl, realm, stateless, strict, extensions)
   this.extensions = extensions;
 }
 
+// carry return url and realm for dynamic callback url in callback phase.
 openid.RelyingParty.prototype.authenticate = function(identifier, immediate, callback, returnUrl, realm)
 {
 
-  console.log('openid authenticate returnUrl', returnUrl);
-  console.log('openid authenticate realm', realm);
   this.returnUrl = returnUrl || this.returnUrl;
   this.realm = realm || this.realm;
   openid.authenticate(identifier, this.returnUrl, this.realm, 

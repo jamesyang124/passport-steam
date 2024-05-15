@@ -235,11 +235,6 @@ Strategy.prototype.authenticate = function(req) {
   
     var identifier = undefined;
 
-    console.log('passport open-id configure - ', this._identifierField);
-    console.log('req.body', req.body);
-    console.log('returnUrl', req.query.returnURL);
-    console.log('realm', req.query.realm);
-
     if (req.body && req.body[this._identifierField]) {
       identifier = req.body[this._identifierField];
     } else if (req.query && req.query[this._identifierField]) {
@@ -255,6 +250,7 @@ Strategy.prototype.authenticate = function(req) {
       if (err || !providerUrl) { return self.error(new InternalOpenIDError('Failed to discover OP endpoint URL', err)); }
       self.redirect(providerUrl);
     },
+    // carry returnURL, realm param from /steam/auth/return api 
     req.query.returnURL,
     req.query.realm
     );

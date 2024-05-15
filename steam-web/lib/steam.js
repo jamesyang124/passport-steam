@@ -54,8 +54,13 @@ steam.prototype.getPlayerSummaries = function(obj) {
   //turn the array into a comma separated list
   if (typeof obj.steamids == 'object') obj.steamids = obj.steamids.join('\,');
 
-//  api.steampowered.com/ISteamUser/GetPlayerSummaries/v2
-//  obj.path = '/ISteamUser/GetPlayerSummaries/v0002/?',
+  //  obj.path = '/ISteamUser/GetPlayerSummaries/v0002/?',
+  //  we request https steam api instead, there have https version for steam apis:
+  //  https://partner.steamgames.com/doc/webapi/ISteamUser
+  //  we did not test other api route since this patch aim for this api path.
+  //  
+  //  http api doc potal:
+  //  https://steamcommunity.com/dev
 
   obj.path = '/ISteamUser/GetPlayerSummaries/v2/?',
   this.makeRequest(obj)
@@ -457,6 +462,7 @@ steam.prototype.makeRequest = function(obj) {
 
   console.log('path', path);
 
+  // override to use https 443 instead of htt 80, for security reason.
   var options = {
     host: 'api.steampowered.com',
     port: 443,

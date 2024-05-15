@@ -1,8 +1,7 @@
 {
   "_args": [
     [
-      "openid@2.0.6",
-      "/Users/James_Yang/Coding/misc/passport-steam"
+      "openid@2.0.6"
     ]
   ],
   "_from": "openid@2.0.6",

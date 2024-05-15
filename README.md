@@ -4,6 +4,18 @@
 with [Steam](http://steamcommunity.com/) using OpenID 2.0.
 
 
+## 2024/05/16
+
+1. patch for dynamic callback url, and rewrite api requesting for https and GetPlayerSummaries api only.
+
+2. request `/auth/steam?returnURL=<dynamic-callback-url>&realm=<dynamic-callback-url>` to override preset url.
+
+3. currently patch on app-router only due to we treat it as api proxy for backend, and remove unnecessary sessison mechanism.
+
+4. local patch steam-web, openid, @passport-next/passport-openid packages, and not intend to PR these repos.
+
+5. add logger for express, and dockerfile for containerized.
+
 ## Installation
 
 ```bash

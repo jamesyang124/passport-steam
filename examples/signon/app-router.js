@@ -9,10 +9,10 @@ var express = require('express')
   , SteamStrategy = require('../../').Strategy
   , authRoutes = require('./routes/auth');
 
-const { logger } = require('./logger.js');
+var { logger } = require('./logger.js');
 
-const morgan = require('morgan');
-const morganMiddleware = morgan(
+var morgan = require('morgan');
+var morganMiddleware = morgan(
   ':method :url :status :res[content-length] - :response-time ms',
   {
     stream: {
@@ -37,27 +37,25 @@ const morganMiddleware = morgan(
 //   done(null, obj);
 // });
 
-const strat = new SteamStrategy({
-      returnURL: 'http://localhost:3000/auth/steam/return',
-      realm: 'http://localhost:3000/',
-      apiKey: 'YOUR API SECRET',
-      identifierField: 'openid.identity'
-    },
-    function(identifier, profile, done) {
-      // asynchronous verification, for effect...
-      process.nextTick(function () {
-        logger.info('steam profile info', profile);
-        // To keep the example simple, the user's Steam profile is returned to
-        // represent the logged-in user.  In a typical application, you would want
-        // to associate the Steam account with a user record in your database,
-        // and return that user instead.
-        profile.identifier = identifier;
-        return done(null, profile);
-      });
-    }
-  );
-
-authRoutes.strat = strat;
+var strat = new SteamStrategy({
+    returnURL: 'http://localhost:3000/auth/steam/return',
+    realm: 'http://localhost:3000/',
+    apiKey: 'YOUR API SECRET',
+    identifierField: 'openid.identity'
+  },
+  function(identifier, profile, done) {
+    // asynchronous verification, for effect...
+    process.nextTick(function () {
+      logger.info('steam profile info', profile);
+      // To keep the example simple, the user's Steam profile is returned to
+      // represent the logged-in user.  In a typical application, you would want
+      // to associate the Steam account with a user record in your database,
+      // and return that user instead.
+      profile.identifier = identifier;
+      return done(null, profile);
+    });
+  }
+);
 
 // Use the SteamStrategy within Passport.
 //   Strategies in passport require a `validate` function, which accept
@@ -101,6 +99,7 @@ app.use(express.static(__dirname + '/../../public'));
 // See views/auth.js for authentication routes
 app.use('/auth', authRoutes);
 
+// health check for infra
 app.get('/health', function(req, res){
   res.sendStatus(200);
 });
@@ -112,7 +111,7 @@ app.listen(3000);
 //   the request is authenticated (typically via a persistent login session),
 //   the request will proceed.  Otherwise, the user will be redirected to the
 //   login page.
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/');
-}
+// function ensureAuthenticated(req, res, next) {
+//   if (req.isAuthenticated()) { return next(); }
+//   res.redirect('/');
+// }
