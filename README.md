@@ -4,7 +4,7 @@
 with [Steam](http://steamcommunity.com/) using OpenID 2.0.
 
 
-## 2024/05/16
+## 2024/05/17
 
 1. patch for dynamic callback url, and rewrite api requesting for https and GetPlayerSummaries api only.
 
@@ -15,6 +15,10 @@ with [Steam](http://steamcommunity.com/) using OpenID 2.0.
 4. local patch steam-web, openid, @passport-next/passport-openid packages, and not intend to PR these repos.
 
 5. add logger for express, and dockerfile for containerized.
+
+6. pull image by: `docker pull ghcr.io/jamesyang124/passport-steam/auth-proxy:1.0.19`
+
+7. todo: expose config (secret, cb, etc.) to env.
 
 ## Installation
 
