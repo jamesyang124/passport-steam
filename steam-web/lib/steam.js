@@ -1,5 +1,5 @@
 var https = require('https');
-// var http = require('http');
+var http = require('http');
 var qs = require('qs');
 
 /*
@@ -452,23 +452,26 @@ steam.prototype.makeRequest = function(obj) {
   var path = obj.path;
   delete obj.path;
   obj.key = this.apiKey;
-
-  console.log('obj.key', obj.key);
-
   obj.format = this.format;
 
   //generate the path
   path += qs.stringify(obj);
 
-  console.log('path', path);
-
-  // override to use https 443 instead of htt 80, for security reason.
   var options = {
     host: 'api.steampowered.com',
-    port: 443,
+    port: 80,
     path: path
   };
-  var req = https.get(options, function(res) {
+
+  var protocol = http;
+
+  // override to use https 443 instead of htt 80, for security reason.
+  if (path.startsWith('/ISteamUser/GetPlayerSummaries/v2/?')) {
+    options.port = 443;
+    protocol = https;
+  }
+
+  protocol.get(options, function(res) {
     var resData = '';
     var statusCode = res.statusCode;
     res.on('data', function (chunk) {
@@ -504,6 +507,5 @@ steam.prototype.makeRequest = function(obj) {
   }).on('error', function(error) {
     callback(error);
   })
-
 }
 module.exports = steam;
