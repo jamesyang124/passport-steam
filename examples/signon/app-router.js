@@ -7,7 +7,8 @@ var express = require('express')
 //  , util = require('util')
 //  , session = require('express-session')
   , SteamStrategy = require('../../').Strategy
-  , authRoutes = require('./routes/auth');
+  , authRoutes = require('./routes/auth')
+  , { OPENID_RETURN_URL, OPENID_REALM, STEAM_API_KEY, OPENID_IDENTIFIER_FIELD } = require('./conf');
 
 var { logger } = require('./logger.js');
 
@@ -38,10 +39,10 @@ var morganMiddleware = morgan(
 // });
 
 var strat = new SteamStrategy({
-    returnURL: 'http://localhost:3000/auth/steam/return',
-    realm: 'http://localhost:3000/',
-    apiKey: 'YOUR API SECRET',
-    identifierField: 'openid.identity'
+    returnURL: OPENID_RETURN_URL,
+    realm: OPENID_REALM,
+    apiKey: STEAM_API_KEY,
+    identifierField: OPENID_IDENTIFIER_FIELD
   },
   function(identifier, profile, done) {
     // asynchronous verification, for effect...

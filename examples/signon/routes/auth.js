@@ -1,6 +1,7 @@
 var express = require('express')
   , router = express.Router()
-  , passport = require('passport');
+  , passport = require('passport')
+  , { OPENID_RETURN_URL, OPENID_REALM } = require('../conf');
 
 var logger = require('winston');
 
@@ -11,12 +12,13 @@ var logger = require('winston');
 //   user back to this application at /auth/steam/return
 router.get('/steam', function(req, res, next) {
     if (!req.query.realm || !req.query.returnURL) {
-      logger.error('missing required realm and returnURL query parameter');
-      res.sendStatus(404); 
-    } else {
-      var authenticator = passport.authenticate('steam', { failureRedirect: '/', session: false});
-      authenticator(req, res, next);
+      logger.warn('missing one of realm and returnURL query parameter, fallback to strategy default realm and returnURL');
+      req.query.realm = OPENID_REALM;
+      req.query.returnURL = OPENID_RETURN_URL;
     }
+
+    var authenticator = passport.authenticate('steam', { failureRedirect: '/', session: false});
+    authenticator(req, res, next);
   });
 
 // GET /auth/steam/return

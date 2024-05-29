@@ -1,0 +1,11 @@
+var OPENID_RETURN_URL = process.env.OPENID_RETURN_URL || 'http://localhost:3000/auth/steam/return';
+var OPENID_REALM = process.env.OPENID_REALM || 'http://localhost:3000/';
+var STEAM_API_KEY = process.env.STEAM_API_KEY || 'YOUR STEAM API KEY';
+var OPENID_IDENTIFIER_FIELD = process.env.OPENID_IDENTIFIER_FIELD || 'openid.identity';
+
+module.exports = {
+  OPENID_RETURN_URL: OPENID_RETURN_URL,
+  OPENID_REALM: OPENID_REALM,
+  STEAM_API_KEY: STEAM_API_KEY,
+  OPENID_IDENTIFIER_FIELD: OPENID_IDENTIFIER_FIELD
+};
