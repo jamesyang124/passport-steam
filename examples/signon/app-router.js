@@ -58,6 +58,8 @@ var strat = new SteamStrategy({
   }
 );
 
+authRoutes.strat = strat;
+
 // Use the SteamStrategy within Passport.
 //   Strategies in passport require a `validate` function, which accept
 //   credentials (in this case, an OpenID identifier and profile), and invoke a
