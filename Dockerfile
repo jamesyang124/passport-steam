@@ -12,6 +12,9 @@ RUN npm install
 
 COPY --chown=node:node . .
 
+RUN cd /home/node/app/@passport-next/passport-openid && npm install
+RUN cd /home/node/app
+
 EXPOSE 3000
 
 CMD [ "npm", "run", "example-router" ]
