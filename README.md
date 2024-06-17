@@ -4,7 +4,7 @@
 with [Steam](http://steamcommunity.com/) using OpenID 2.0.
 
 
-## 2024/05/30
+## 2024/06/17
 
 1. patch for dynamic callback url, and rewrite api requesting for `https` and `GetPlayerSummaries` api.
 
@@ -16,11 +16,13 @@ with [Steam](http://steamcommunity.com/) using OpenID 2.0.
 
 5. add logger for express, and dockerfile for containerized.
 
-6. pull image by: `docker pull ghcr.io/jamesyang124/passport-steam/auth-proxy:1.0.20`
+6. pull image by: `docker pull ghcr.io/jamesyang124/passport-steam/auth-proxy:1.0.21`
 
 7. expose config (secret, cb, etc.) to env, separate config to `conf.js`.
 
 8. rewrite `/auth/steam` input validation, fallback to default strategy's `returnURL` and `realm` if missing one of input from query parameter.
+
+9. fix profile featch api missing strat issue
 
 ## Installation
 
